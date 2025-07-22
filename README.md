@@ -70,6 +70,7 @@ AeroSuite/
 ├── .venv311/        # Environnement virtuel (non versionné)
 ├── .vscode/         # Config VSCode (non versionné)
 └── __pycache__/     # Cache Python (non versionné)
+```
 
 Remarques
 
