@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Contrôle Avion</title>
+    <meta>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        p {
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<h1>Contrôle Avion - ON/OFF et paramètres</h1>
+
+<form method="POST">
+    <button type="submit" name="toggle">{{ 'OK' if variables.teleport_airplane else 'TELEPORT' }}</button>
+
+    <label for="target_airspeed">Vitesse cible (noeuds) :</label>
+    <input type="text" id="target_airspeed" name="target_airspeed" value="{{ variables.target_airspeed }}">
+
+    <label for="target_altitude">Altitude cible (pieds) :</label>
+    <input type="text" id="target_altitude" name="target_altitude" value="{{ variables.target_altitude }}">
+
+    <label for="target_heading">Cap cible (degrés) :</label>
+    <input type="text" id="target_heading" name="target_heading" value="{{ variables.target_heading }}">
+
+    <button type="submit" name="apply">Appliquer</button>
+</form>
+<iframe src="http://localhost:5000/stats" width="100%" height="100%" style="border:none;"></iframe>
+</body>
+</html>

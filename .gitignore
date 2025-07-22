@@ -1,0 +1,14 @@
+# 🐍 Environnements virtuels
+.venv/
+.venv311/
+
+# 🔥 Python cache
+__pycache__/
+*.pyc
+
+# 💻 VSCode config
+.vscode/
+
+# 📄 Fichiers inutiles
+*.log
+*.tmp

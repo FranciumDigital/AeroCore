@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_e42e600a754f1f3cc5e4eaf44cf8978b {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+
+    <style>
+    .leaflet-marker-icon.plane-marker {
+        z-index: 10000 !important;
+    }
+    </style>
+    </head>
+<body>
+    
+    
+            <div class="folium-map" id="map_e42e600a754f1f3cc5e4eaf44cf8978b" ></div>
+        
+
+    <script src="https://rawcdn.githack.com/bbecquet/Leaflet.RotatedMarker/master/leaflet.rotatedMarker.js"></script>
+    <script>
+    var map_var = "map_e42e600a754f1f3cc5e4eaf44cf8978b";
+    var dynamicMarker = null;
+    var extraMarkers = [];
+
+    var planeIcon = L.icon({
+        iconUrl: 'plane-icon.png',
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
+        popupAnchor: [0, -16]
+    });
+
+    var dynamicLines = {};
+
+    function updateLines(lines) {
+        const newLabels = lines.map(line => line.label);
+
+        Object.keys(dynamicLines).forEach(label => {
+            if (!newLabels.includes(label)) {
+                window[map_var].removeLayer(dynamicLines[label]);
+                delete dynamicLines[label];
+            }
+        });
+
+        lines.forEach(line => {
+            const latlngs = line.coords.map(p => [p.latitude, p.longitude]);
+
+            if (!dynamicLines[line.label]) {
+                dynamicLines[line.label] = L.polyline(latlngs, {color: 'blue', weight: 3}).addTo(window[map_var]);
+            } else {
+                dynamicLines[line.label].setLatLngs(latlngs);
+            }
+        });
+    }
+
+    function updateMarker(lat, lng, heading) {
+        if (dynamicMarker) {
+            dynamicMarker.setLatLng([lat, lng]);
+            dynamicMarker.setRotationAngle(heading || 0);
+
+            if (dynamicMarker._icon && dynamicMarker._icon.parentNode) {
+                dynamicMarker._icon.parentNode.appendChild(dynamicMarker._icon);
+            }
+        }
+    }
+
+    function updateExtraPoints(points) {
+        extraMarkers.forEach(m => window[map_var].removeLayer(m));
+        extraMarkers = [];
+
+        points.forEach(p => {
+            let markerOptions = {};
+
+            if (p.icon) {
+                if (p.icon.type === "color") {
+                    markerOptions.icon = L.icon({
+                        iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${p.icon.value}.png`,
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                        shadowSize: [41, 41]
+                    });
+                } else if (p.icon.type === "image") {
+                    markerOptions.icon = L.icon({
+                        iconUrl: p.icon.value,
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8],
+                    });
+                }
+            }
+
+            const marker = L.marker([p.latitude, p.longitude], markerOptions);
+            if (p.popup) marker.bindPopup(p.popup);
+            marker.addTo(window[map_var]);
+            extraMarkers.push(marker);
+        });
+    }
+
+    async function pollPosition() {
+        try {
+            const res = await fetch('/position');
+            const data = await res.json();
+            updateMarker(data.avion.latitude, data.avion.longitude, data.avion.heading);
+            updateExtraPoints(data.points || []);
+            updateLines(data.lines || []);
+        } catch (e) {
+            console.error("Erreur de mise à jour : ", e);
+        }
+        setTimeout(pollPosition, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        dynamicMarker = L.marker([0, 0], {
+            icon: planeIcon,
+            rotationAngle: 0,
+            rotationOrigin: 'center center'
+        }).addTo(window[map_var]);
+        if (dynamicMarker._icon) {
+            dynamicMarker._icon.classList.add('plane-marker');
+        }
+        pollPosition();
+    });
+    </script>
+    </body>
+<script>
+    
+    
+            var map_e42e600a754f1f3cc5e4eaf44cf8978b = L.map(
+                "map_e42e600a754f1f3cc5e4eaf44cf8978b",
+                {
+                    center: [48.8566, 2.3522],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_da341c4035181b9997951636e901dc5b = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_da341c4035181b9997951636e901dc5b.addTo(map_e42e600a754f1f3cc5e4eaf44cf8978b);
+        
+</script>
+</html>

@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Contrôle Avion</title>
+    <meta http-equiv="refresh" content="0.5">  <!-- rafraîchit la page toutes les 1 seconde -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+        p {
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<p>État téléportation avion : {{ 'ON' if variables.teleport_airplane else 'OFF' }}</p>
+<br><br>
+<p>Vitesse actuelle : {{ variables.actual_airspeed }} noeuds</p>
+<p>Vitesse cible : {{ variables.target_airspeed }} noeuds</p>
+<p>Commande du throttle : {{ variables.throttle_command }}</p>
+<br><br>
+<p>Altitude actuelle : {{ variables.actual_altitude }} pieds</p>
+<p>Altitude cible : {{ variables.target_altitude }} pieds</p>
+<p>Commande des elevtor : {{ variables.elevator_command }}</p>
+<br><br>
+<p>Cap actuel : {{ variables.actual_heading }}°</p>
+<p>Cap cible : {{ variables.target_heading }}°</p>
+<p>Commande des ailerons : {{ variables.aileron_command }}</p>
+</body>
+</html>
