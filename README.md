@@ -1,6 +1,6 @@
 # AeroSuite – AeroCore
 
-AeroSuite est une suite modulaire conçue pour gérer le vol d’un aéronef en connectant et contrôlant différents périphériques embarqués.  
+AeroSuite est une suite modulaire originellement conçue pour gérer le vol d’un aéronef sur msfs2024 en connectant et contrôlant différents périphériques embarqués.  
 AeroCore est le cœur logiciel du pilote automatique, responsable du calcul et de la stabilisation automatique du vol.
 
 ---
