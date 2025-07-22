@@ -79,8 +79,7 @@ Remarques
     AeroCore est optimisé pour des mises à jour en temps réel et une interface utilisateur claire.
 
 Licence
+MIT
 
-À définir (exemple MIT, GPL, etc.)
 Contact
-
 Pour toute question ou contribution, merci de contacter FranciumDigital via GitHub.
