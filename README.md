@@ -58,14 +58,18 @@ Lancer le programme principal :
 
 Structure du projet
 
+
+```plaintext
 AeroSuite/
-├── main.py          # Programme pilote auto principal
-├── map.py           # Carte interactive avec Leaflet
-├── stats.py         # Statistiques affichées dans l’interface web
-├── oscillo.py       # Oscilloscope logiciel pour PID
-├── pid.py           # Logique et variables PID
-├── templates/       # Fichiers HTML et ressources web
-└── ...
+├── main.py          # Pilote automatique, calculs PID
+├── map.py           # Carte interactive Leaflet
+├── stats.py         # Affichage stats sur page web
+├── oscillo.py       # Oscilloscope PID en temps réel
+├── pid.py           # Variables et calculs PID
+├── templates/       # Fichiers HTML pour interface
+├── .venv311/        # Environnement virtuel (non versionné)
+├── .vscode/         # Config VSCode (non versionné)
+└── __pycache__/     # Cache Python (non versionné)
 
 Remarques
 
