@@ -1,64 +1,81 @@
-# FlightFollow - Autopilot & Monitoring System
+# AeroSuite – AeroCore
 
-Ce projet gère un pilote automatique d'avion ainsi qu'une interface web interactive pour le suivi en temps réel.
+AeroSuite est une suite modulaire conçue pour gérer le vol d’un aéronef en connectant et contrôlant différents périphériques embarqués.  
+AeroCore est le cœur logiciel du pilote automatique, responsable du calcul et de la stabilisation automatique du vol.
 
 ---
 
 ## Description générale
 
+AeroCore orchestre les fonctions critiques du pilote automatique, en réalisant les calculs PID essentiels pour stabiliser le cap, l’altitude, la vitesse, et la trajectoire.  
+Ce composant est connecté à une interface web qui permet de visualiser la position de l’avion, ses statistiques de vol et le comportement des PID en temps réel.
+
+---
+
+## Composants clés
+
 - **main.py**  
-  C'est le programme principal qui pilote l'autopilote.  
-  Il réalise les calculs PID nécessaires pour stabiliser le cap, la vitesse, l'altitude, et d'autres paramètres du vol.
+  Programme principal qui gère la logique du pilote automatique et exécute les calculs PID pour la stabilisation du vol.
 
 - **map.py**  
-  Fournit une carte interactive (Leaflet.js) qui affiche la position actuelle de l'avion, les points dynamiques, ainsi que les lignes et trajectoires.
+  Génère une carte interactive affichant la position de l’avion en temps réel avec Leaflet.
 
 - **stats.py**  
-  Contient les fonctions pour collecter et afficher les statistiques de vol sur la page web avec la carte.
+  Affiche les statistiques de vol et de contrôle sur la page web, fournissant un suivi clair des données en cours.
 
 - **oscillo.py**  
-  Un oscilloscope logiciel permettant de visualiser en temps réel les actions des PID (Proportionnel, Intégral, Dérivé).
+  Oscilloscope logiciel qui montre en temps réel l’activité des PID, permettant une analyse fine de leurs réactions.
 
 - **pid.py**  
-  Implémente les contrôleurs PID utilisés pour ajuster automatiquement le vol selon les objectifs définis.
-
-- **variables.py**  
-  Fichier centralisant toutes les variables partagées entre les modules et l'interface web.
-
-- **autopilot.py**  
-  Gère la logique spécifique du pilote automatique, s’appuyant sur les calculs PID pour les ajustements.
-
-- **templates/**  
-  Contient les fichiers HTML, CSS et les ressources nécessaires pour l'interface web.
+  Contient les variables PID et la logique de contrôle utilisées par l’interface web connectée à main.py.
 
 ---
 
-## Fonctionnement
+## Fonctionnalités
 
-1. `main.py` orchestre le système, réalise les calculs de pilotage via les PID, et met à jour la position et les données de l’avion.  
-2. La carte interactive (via `map.py`) permet de visualiser en temps réel la position, la trajectoire et les points dynamiques.  
-3. Les statistiques et oscilloscopes (`stats.py` et `oscillo.py`) fournissent une visualisation claire des paramètres de vol et des actions du PID.  
-4. L’interface web est mise à jour périodiquement grâce à une communication AJAX qui interroge le serveur pour récupérer les dernières données.
-
----
-
-## Technologies utilisées
-
-- Python 3.x  
-- Flask / HTTPServer pour le serveur web (selon implémentation)  
-- Leaflet.js pour la carte interactive  
-- JavaScript pour la mise à jour dynamique de la carte et des données  
-- PID Control Theory pour la stabilisation automatique  
+- Calcul en temps réel des paramètres de vol pour une stabilisation automatique précise.  
+- Visualisation dynamique de la position de l’avion sur une carte interactive et mise à jour continue.  
+- Monitoring des PID via un oscilloscope pour un diagnostic en temps réel.  
+- Interface web intuitive pour la supervision et le contrôle à distance.
 
 ---
 
-## Installation & utilisation
+## Installation et utilisation
 
-1. Cloner le projet  
-2. Installer les dépendances (si virtualenv : `pip install -r requirements.txt`)  
-3. Lancer `main.py`  
-4. Ouvrir `http://localhost:5001` dans un navigateur pour voir la carte et les stats en temps réel  
+1. Cloner le dépôt :
+   ```bash
+   git clone https://github.com/FranciumDigital/auto_pilot.git
 
----
+    Installer les dépendances (exemple avec pip) :
 
-Si tu as des questions ou besoin d’aide pour démarrer, n’hésite pas à me demander !
+pip install -r requirements.txt
+
+Lancer le programme principal :
+
+    python main.py
+
+    Accéder à l’interface web via http://localhost:5001 pour visualiser la carte, les stats, et l’oscilloscope.
+
+Structure du projet
+
+AeroSuite/
+├── main.py          # Programme pilote auto principal
+├── map.py           # Carte interactive avec Leaflet
+├── stats.py         # Statistiques affichées dans l’interface web
+├── oscillo.py       # Oscilloscope logiciel pour PID
+├── pid.py           # Logique et variables PID
+├── templates/       # Fichiers HTML et ressources web
+└── ...
+
+Remarques
+
+    Ce composant est l’un des modules de la suite AeroSuite, qui vise à fournir une gestion complète et connectée du vol, incluant la navigation, le pilotage, et l’interfaçage avec divers périphériques embarqués.
+
+    AeroCore est optimisé pour des mises à jour en temps réel et une interface utilisateur claire.
+
+Licence
+
+À définir (exemple MIT, GPL, etc.)
+Contact
+
+Pour toute question ou contribution, merci de contacter FranciumDigital via GitHub.
